@@ -8,4 +8,7 @@ public class Product {
     private String productId;
     private String productName;
     private int productQuantity;
+    public void setId(Long id) {
+        this.productId = id.toString();
+    }
 }
