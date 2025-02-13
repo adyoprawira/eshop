@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class ProductRepository {
@@ -33,11 +34,12 @@ public class ProductRepository {
                 .findFirst()
                 .orElse(null);
 
-        if (productToUpdate != null) {
-            productToUpdate.setProductName(product.getProductName());
-            productToUpdate.setProductQuantity(product.getProductQuantity());
+        if (productToUpdate == null) {  // Check if productToUpdate is null
+            throw new NoSuchElementException("Product not found for update");
         }
 
+        productToUpdate.setProductName(product.getProductName());
+        productToUpdate.setProductQuantity(product.getProductQuantity());
         return productToUpdate;
     }
 }
