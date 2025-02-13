@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class ProductRepository {
@@ -42,6 +43,9 @@ public class ProductRepository {
     }
 
     public void delete(Product product) {
-        productData.remove(product);
+        boolean removed = productData.removeIf(p -> p.getProductId().equals(product.getProductId())); // Use removeIf
+        if (!removed) { // Check if anything was removed
+            throw new NoSuchElementException("Product not found for delete");
+        }
     }
 }
