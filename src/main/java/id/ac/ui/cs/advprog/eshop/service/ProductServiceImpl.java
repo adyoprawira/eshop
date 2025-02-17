@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong; // For generating unique IDs
+import java.util.UUID; // Use UUIDs for String IDs
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -16,16 +16,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    // AtomicLong for thread-safe ID generation
-    private final AtomicLong idGenerator = new AtomicLong(1);
-
     @Override
     public Product create(Product product) {
-        // Generate a unique ID for the product
-        Long productId = idGenerator.getAndIncrement();
-        product.setProductId(productId.toString());
+        // Generate a UUID for the product ID
+        String productId = UUID.randomUUID().toString();
+        product.setProductId(productId);
 
-        // Save the product with the generated ID
         productRepository.create(product);
         return product;
     }
@@ -37,14 +33,17 @@ public class ProductServiceImpl implements ProductService {
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
     }
+
     @Override
-    public Product findById(Long id) {
+    public Product findById(String id) {
         return productRepository.findById(id);
     }
 
+
     @Override
     public Product update(Product product) {
-        return productRepository.update(product);
+        productRepository.update(product);
+        return product;
     }
 
     @Override

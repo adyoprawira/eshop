@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 @Repository
 public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+    private final List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
         productData.add(product);
@@ -21,9 +21,9 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(Long id) {
+    public Product findById(String id) { // Changed to String
         return productData.stream()
-                .filter(product -> product.getProductId().equals(id.toString()))
+                .filter(product -> product.getProductId().equals(id)) // No need for toString()
                 .findFirst()
                 .orElse(null);
     }
@@ -34,7 +34,7 @@ public class ProductRepository {
                 .findFirst()
                 .orElse(null);
 
-        if (productToUpdate == null) {  // Check if productToUpdate is null
+        if (productToUpdate == null) {
             throw new NoSuchElementException("Product not found for update");
         }
 
@@ -44,8 +44,8 @@ public class ProductRepository {
     }
 
     public void delete(Product product) {
-        boolean removed = productData.removeIf(p -> p.getProductId().equals(product.getProductId())); // Use removeIf
-        if (!removed) { // Check if anything was removed
+        boolean removed = productData.removeIf(p -> p.getProductId().equals(product.getProductId()));
+        if (!removed) {
             throw new NoSuchElementException("Product not found for delete");
         }
     }
