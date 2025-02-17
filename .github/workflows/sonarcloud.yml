@@ -3,7 +3,7 @@ name: SonarCloud Analysis
 on:
   push:
     branches:
-      - "**"  # Triggers on every push to any branch
+      - "**"  # Run on every push to any branch
 
 jobs:
   sonarcloud:
@@ -19,6 +19,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Grant execute permission to Gradle wrapper
+        run: chmod +x gradlew
 
       - name: Cache SonarCloud Packages
         uses: actions/cache@v3
@@ -40,4 +43,3 @@ jobs:
         run: |
           ./gradlew build
           ./gradlew sonarqube --info
-
