@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+    private final List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
         productData.add(product);
@@ -20,9 +21,9 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(Long id) {
+    public Product findById(String id) { // Changed to String
         return productData.stream()
-                .filter(product -> product.getProductId().equals(id.toString()))
+                .filter(product -> product.getProductId().equals(id)) // No need for toString()
                 .findFirst()
                 .orElse(null);
     }
@@ -33,15 +34,19 @@ public class ProductRepository {
                 .findFirst()
                 .orElse(null);
 
-        if (productToUpdate != null) {
-            productToUpdate.setProductName(product.getProductName());
-            productToUpdate.setProductQuantity(product.getProductQuantity());
+        if (productToUpdate == null) {
+            throw new NoSuchElementException("Product not found for update");
         }
 
+        productToUpdate.setProductName(product.getProductName());
+        productToUpdate.setProductQuantity(product.getProductQuantity());
         return productToUpdate;
     }
 
     public void delete(Product product) {
-        productData.remove(product);
+        boolean removed = productData.removeIf(p -> p.getProductId().equals(product.getProductId()));
+        if (!removed) {
+            throw new NoSuchElementException("Product not found for delete");
+        }
     }
 }

@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Setter
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -24,7 +26,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String createProductPost(@ModelAttribute Product product, Model model) {
+    public String createProductPost(@ModelAttribute Product product) {
         service.create(product);
         return "redirect:list";
     }
@@ -37,23 +39,24 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editProductPage(@PathVariable("id") Long id, Model model) {
+    public String editProductPage(@PathVariable("id") String id, Model model) {
         Product product = service.findById(id);
         model.addAttribute("product", product);
         return "EditProduct";
     }
 
     @PostMapping("/edit/{id}")
-    public String editProductPost(@PathVariable("id") Long id, @ModelAttribute Product product, Model model) {
+    public String editProductPost(@PathVariable("id") String id, @ModelAttribute Product product) {
         product.setId(id);
         service.update(product);
         return "redirect:/product/list";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long id, Model model) {
+    public String deleteProduct(@PathVariable("id") String id) {
         Product product = service.findById(id);
         service.delete(product);
         return "redirect:/product/list";
     }
+
 }
