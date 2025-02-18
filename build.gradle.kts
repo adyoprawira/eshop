@@ -3,6 +3,7 @@ plugins {
 	jacoco
 	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("org.sonarqube") version "4.3.1.3277"
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -11,6 +12,15 @@ version = "0.0.1-SNAPSHOT"
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "adyoprawira_eshop") // Example
+		property("sonar.organization", "adyoprawira") // Example
+		property("sonar.host.url", "https://sonarcloud.io")
+		property("sonar.token", System.getenv("SONAR_TOKEN"))
 	}
 }
 
