@@ -32,8 +32,12 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
 
-      - name: Deploy to Koyeb using CLI
+      - name: Install Koyeb CLI
         run: |
-          curl -fsSL https://github.com/koyeb/koyeb-cli/releases/latest/download/koyeb-cli_linux_amd64 -o koyeb
-          chmod +x koyeb
-          ./koyeb app deploy ${{ secrets.KOYEB_APP_NAME }} --image ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest --token ${{ secrets.KOYEB_TOKEN }}
+          curl -fsSL https://get.koyeb.app -o install.sh
+          chmod +x install.sh
+          ./install.sh
+
+      - name: Deploy to Koyeb
+        run: |
+          koyeb app deploy ${{ secrets.KOYEB_APP_NAME }} --image ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest --token ${{ secrets.KOYEB_TOKEN }}
