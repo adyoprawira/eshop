@@ -18,6 +18,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Grant execute permission to Gradlew
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
