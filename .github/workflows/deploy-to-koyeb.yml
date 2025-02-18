@@ -30,10 +30,10 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
 
       - name: Deploy to Koyeb
-        uses: koyeb/action@v1
+        uses: koyeb/deploy-action@v1  # The CORRECT and UPDATED action name
         with:
           token: ${{ secrets.KOYEB_TOKEN }}
           app_name: ${{ secrets.KOYEB_APP_NAME }}
-          service_name: ${{ secrets.KOYEB_SERVICE_NAME }} # Optional
+          service_name: ${{ secrets.KOYEB_SERVICE_NAME }}  # Optional
           image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
           port: 8080
