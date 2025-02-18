@@ -3,7 +3,7 @@ name: Deploy to Koyeb
 on:
   push:
     branches:
-      - main  # Or your main branch name
+      - main
 
 jobs:
   deploy:
@@ -23,20 +23,19 @@ jobs:
         with:
           arguments: build bootJar
 
+      - name: Install Koyeb CLI
+        run: curl -sL https://github.com/koyeb/koyeb-cli/releases/latest/download/koyeb-linux-amd64 -o koyeb && chmod +x koyeb && sudo mv koyeb /usr/local/bin/
+
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest .
 
       - name: Log in to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
 
-      - name: Deploy to Koyeb
-        uses: koyeb/koyeb-action@v1
-        with:
-          token: ${{ secrets.KOYEB_TOKEN }}
-          app_name: ${{ secrets.KOYEB_APP_NAME }}
-          service_name: ${{ secrets.KOYEB_SERVICE_NAME }} # Optional
-          image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
-          port: 8080
+      - name: Deploy to Koyeb using CLI
+        run: koyeb service update ${{ secrets.KOYEB_APP_NAME }} --docker ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest --port 8080
+        env:
+          KOYEB_TOKEN: ${{ secrets.KOYEB_TOKEN }}
