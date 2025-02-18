@@ -36,7 +36,7 @@ jobs:
         uses: koyeb/github-action@v1
         with:
           token: ${{ secrets.KOYEB_TOKEN }}
-          app_name: ${{eshop}} # Replace with your Koyeb app name
-          service_name: ${{ secrets.KOYEB_SERVICE_NAME }} # Replace with your Koyeb service name (or leave empty for auto-generated)
+          app_name: ${{ secrets.KOYEB_APP_NAME }}
+          service_name: ${{ secrets.KOYEB_SERVICE_NAME }}
           image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
-          port: 8080 # Important: Specify the correct port
+          port: 8080
