@@ -1,0 +1,42 @@
+name: Deploy to Koyeb
+
+on:
+  push:
+    branches:
+      - main  # Or your main branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build bootJar
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest .
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
+
+      - name: Deploy to Koyeb
+        uses: koyeb/github-action@v1
+        with:
+          token: ${{ secrets.KOYEB_TOKEN }}
+          app_name: ${{eshop}} # Replace with your Koyeb app name
+          service_name: ${{ secrets.KOYEB_SERVICE_NAME }} # Replace with your Koyeb service name (or leave empty for auto-generated)
+          image: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.KOYEB_APP_NAME }}:latest
+          port: 8080 # Important: Specify the correct port
