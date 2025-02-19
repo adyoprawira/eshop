@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -106,5 +107,21 @@ class ProductRepositoryTest {
         nonExistentProduct.setProductId("nonexistent-id");
 
         assertThrows(NoSuchElementException.class, () -> productRepository.delete(nonExistentProduct));
+    }
+
+    @Test
+    void testFindById_positive() {
+        productRepository.create(product1);
+        Product foundProduct = productRepository.findById(product1.getProductId());
+        assertNotNull(foundProduct);
+        assertEquals(product1.getProductId(), foundProduct.getProductId());
+        assertEquals(product1.getProductName(), foundProduct.getProductName());
+        assertEquals(product1.getProductQuantity(), foundProduct.getProductQuantity());
+    }
+
+    @Test
+    void testFindById_negative_productNotFound() {
+        Product foundProduct = productRepository.findById("nonexistent-id");
+        assertNull(foundProduct);
     }
 }
