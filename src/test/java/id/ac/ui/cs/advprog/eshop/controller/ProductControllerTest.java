@@ -13,14 +13,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class ProductControllerTest {
+class ProductControllerTest {
 
     private ProductController controller;
     private Model model;
     private ProductService service; // Add the service
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         controller = new ProductController();
         model = Mockito.mock(Model.class);
         service = Mockito.mock(ProductService.class); // Mock the service

@@ -19,7 +19,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class CreateProductFunctionalTest { // Make the class public
+class CreateProductFunctionalTest { // Make the class public
 
     @LocalServerPort
     private int serverPort;
@@ -30,12 +30,12 @@ public class CreateProductFunctionalTest { // Make the class public
     private String baseUrl;
 
     @BeforeEach
-    public void setupTest() { // Make setupTest public
+    void setupTest() { // Make setupTest public
         baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
     }
 
     @Test
-    public void createProduct_andVerifyInList(ChromeDriver driver) { // Make the test method public
+    void createProduct_andVerifyInList(ChromeDriver driver) { // Make the test method public
         // 1. Navigate to the product creation page
         driver.get(baseUrl + "/product/create");
 

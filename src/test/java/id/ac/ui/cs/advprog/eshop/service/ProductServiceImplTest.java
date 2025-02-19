@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceImplTest {
+class ProductServiceImplTest {
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -32,7 +32,7 @@ public class ProductServiceImplTest {
     private Product product2;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6"); // Example UUID
         product1.setProductName("Sampo Cap Bambang");
