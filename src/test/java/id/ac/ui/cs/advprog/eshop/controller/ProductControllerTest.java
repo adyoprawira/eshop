@@ -31,7 +31,7 @@ class ProductControllerTest {
     void createProductPage_shouldAddProductToModelAndReturnCreateProductView() {
         String viewName = controller.createProductPage(model);
         assertEquals("CreateProduct", viewName);
-        verify(model).addAttribute(eq("product"), argThat(argument -> argument instanceof Product));
+        verify(model).addAttribute(eq("product"), argThat(Product.class::isInstance));
     }
 
     @Test
@@ -48,7 +48,7 @@ class ProductControllerTest {
         when(service.findAll()).thenReturn(products); // Stub the service call
         String viewName = controller.productListPage(model);
         assertEquals("ProductList", viewName);
-        verify(model).addAttribute(eq("products"), eq(products)); // Verify the correct list is added
+        verify(model).addAttribute("products", products); // Verify the correct list is added
     }
 
     @Test
@@ -57,7 +57,7 @@ class ProductControllerTest {
         when(service.findById("1L")).thenReturn(product); // Stub the service call
         String viewName = controller.editProductPage("1L", model);
         assertEquals("EditProduct", viewName);
-        verify(model).addAttribute(eq("product"), eq(product)); // Verify correct product is added
+        verify(model).addAttribute("product", product); // Verify correct product is added
     }
 
     @Test
