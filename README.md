@@ -1,5 +1,7 @@
 ###### Adyo Arkan Prawira / 2306173750
-# AdPro Tutorial & Assignment 
+# AdPro Tutorial & Assignment
+
+### Module 1
 
 #####  Reflection 1
 > You already implemented two new features using Spring Boot. Check again your source code and evaluate the coding standards that you have learned in this module. Write clean code principles and secure coding practices that have been applied to your code.  If you find any mistake in your source code, please explain how to improve your code.
@@ -31,3 +33,21 @@ Reusing the same setup procedures and instance variables might seem convenient, 
 2.  Repeated code makes it hard to identify the unique behaviour of each test classes.
 
 I think having a base test class would improve the code cleanliness. This base test class would have the commonly used setups and methods. When I create new test classes, I would simply extend/implement the base test class. This would reduce code duplication. Another possible improvement is having helper methods which follows the Single Resposibility Principle. Method that is commonly used like `createProduct` could be used on other test classes without having to rewrite the code.
+
+### Module 2
+
+#### Reflection 3
+
+> List the code quality issue(s) that you fixed during the exercise and explain your strategy on fixing them.
+
+These were the issues i encountered and how i fixed them;
+1.  Unnecessary 'public' in functions: Simply by removing them. This will improve maintainability.
+2. Unused imports:  Simply by removing them. This will improve maintainability.
+3. Exception throws in function body:  Simply by removing them. This will improve reliability.
+4. Lack of documentation: Added comments. This will improve maintainability when code gets complex.
+5. Values not passed directly: Pass them directly. This will improve maintainability.
+
+> Look at your CI/CD workflows (GitHub)/pipelines (GitLab). Do you think the current implementation has met the definition of Continuous Integration and Continuous Deployment? Explain the reasons (minimum 3 sentences)!
+
+The workflows which I have implemented have Continuous Integration (CI) setup. The testing was automatically done by ci.yml and the code analysis was automatically done by scorecard.yml and sonarcloud.yml. Although I have tried implementing CD workflow by deploying to Koyeb using deploy-to-koyeb.yml (as seen on previous commits), i decided to use auto-deployment on the Koyeb web for easier use.
+
