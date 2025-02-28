@@ -1,3 +1,4 @@
+
 ###### Adyo Arkan Prawira / 2306173750
 # AdPro Tutorial & Assignment
 
@@ -51,3 +52,35 @@ These were the issues i encountered and how i fixed them;
 
 The workflows which I have implemented have Continuous Integration (CI) setup. The testing was automatically done by ci.yml and the code analysis was automatically done by scorecard.yml and sonarcloud.yml. Although I have tried implementing CD workflow by deploying to Koyeb using deploy-to-koyeb.yml (as seen on previous commits), i decided to use auto-deployment on the Koyeb web for easier use.
 
+### Module 3
+
+#### Reflection 4
+
+> 1) Explain what principles you apply to your project!
+
+1. **SRP (Single Responsibility Principle)**
+Originally in `before-solid`,  the `CarController` class was  extending inside `ProductController.java` which does not adhere to the SRP. To fix this, I moved the `CarController` class into a new Java file `CarController.java`. This way, each class has one responsibility.
+
+2. **OCP (Open Closed Principle)**
+	Originally in `before-solid`,  the `CarRepository` class was implemented directly using a concrete repository class, which does not adhere to the OCP. To fix this, I added a separate interface of `CarRepository.java`, which then `CarRepositoryImpl.java` will implement. This ensures code flexibility since we don't need to modify the existing code when implementing a new feature/function.
+
+3. **ISP (Interface Segregation Principle)**
+	I have made sure to separate the interfaces that is used. `ProductService` is the interface for products and `CarService` is the interface for Cars.
+
+4. **DIP (Dependency Inversion Principle)**
+	I used @Autowired injection so that the code depends on interfaces, not concrete classes. Controllers implement services instead of needing to create objects.
+
+> 2) Explain the advantages of applying SOLID principles to your project with examples.
+-   **Improved Maintainability:** By separating controllers and services, like moving `CarController` out of `ProductController`, the code will be much easier to manage. Now, I can change car-related logic without affecting product handling, which really simplifies future updates.
+-   **Enhanced Flexibility:** The `CarRepository` interface allows me to swap out database implementations without having to rewrite large chunks of code. That kind of adaptability is crucial for long-term projects.
+-   **Increased Testability:** Using dependency injection with `@Autowired` made testing easier. I can easily inject mocks and stubs, which allows me to test controllers in isolation and catch bugs early on.
+-   **Reduced Coupling:** I've noticed a significant reduction in coupling. My code is more modular, meaning that changes in one part of the system are less likely to have unintended consequences elsewhere. 
+-   **Enhanced Clarity:** These principles have made the codebase much cleaner and more understandable.
+> 
+> 3) Explain the disadvantages of not applying SOLID principles to your project with examples.
+
+-   **Increased Chance of Bugs:** If I hadn't separated `CarController` from `ProductController`, any change to product logic could potentially break car-related features. 
+-   **Reduced Flexibility and Increased Rigidity:** Without the `CarRepository` interface, if I wanted to switch databases, I'd have to rewrite significant portions of the data access layer. This would be a massive undertaking, making the application inflexible and resistant to change.
+-   **Difficult and Unreliable Testing:** If I hadn't used dependency injection, testing controllers would be a harder. I'd have to rely on actual database connections and external dependencies, making tests slow and difficult to isolate. This would make it much harder to find bugs and ensure code quality.
+-   **Tight Coupling and Fragile Code:** Without adhering to principles like DIP and ISP, my code would be tightly coupled. Changes in one module would likely ruin the entire system, leading to unexpected errors. This would make the code difficult to maintain.
+-   **Decreased Code Readability and Increased Complexity:** Ignoring SOLID principles leads to messy, disorganized code. Without clear responsibilities and abstractions, the codebase becomes difficult to understand and maintain. 
