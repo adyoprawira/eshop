@@ -1,6 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import id.ac.ui.cs.advprog.eshop.model.Product;
+import enums.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +56,7 @@ class OrderTest {
         assertEquals(1708560000L, order.getOrderTime());
 
         assertEquals("Safira Sudrajat", order.getAuthor());
-        assertEquals("WAITING_PAYMENT", order.getStatus());
+        assertEquals(OrderStatus.WAITING_PAYMENT.getValue(), order.getStatus()); // Modified
     }
 
     @Test
@@ -65,8 +65,8 @@ class OrderTest {
                 this.products,
                 1708560000L,
                 "Safira Sudrajat",
-                "SUCCESS");
-        assertEquals("SUCCESS", order.getStatus());
+                OrderStatus.SUCCESS.getValue()); // Modified
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus()); // Modified
     }
 
     @Test
@@ -76,7 +76,7 @@ class OrderTest {
                     this.products,
                     1708560000L,
                     "Safira Sudrajat",
-                    "MEOW");
+                    "MEOW"); // This remains a string for testing invalid status
         });
     }
 
@@ -86,8 +86,8 @@ class OrderTest {
                 this.products,
                 1708560000L,
                 "Safira Sudrajat");
-        order.setStatus("CANCELLED");
-        assertEquals("CANCELLED", order.getStatus());
+        order.setStatus(OrderStatus.CANCELLED.getValue()); // Modified
+        assertEquals(OrderStatus.CANCELLED.getValue(), order.getStatus()); // Modified
     }
 
     @Test
@@ -96,7 +96,7 @@ class OrderTest {
                 this.products,
                 1708560000L,
                 "Safira Sudrajat");
-        assertThrows(IllegalArgumentException.class, () -> order.setStatus("MEOW"));
+        assertThrows(IllegalArgumentException.class, () -> order.setStatus("MEOW")); // This remains a string for testing invalid status
     }
 
 }
