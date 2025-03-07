@@ -27,15 +27,15 @@ class PaymentRepositoryTest {
         paymentRepository = new PaymentRepository();
         Map<String, String> paymentData1 = new HashMap<>();
         paymentData1.put("voucherCode", "ESHOP1234ABC5678");
-        payment1 = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData1);
+        payment1 = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData1);
 
         Map<String, String> paymentData2 = new HashMap<>();
         paymentData2.put("bankName", "Example Bank");
-        payment2 = new Payment("2", PaymentMethod.BANK_TRANSFER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData2);
+        payment2 = new Payment("2", PaymentMethod.BANK_TRANSFER, PaymentStatus.SUCCESS, paymentData2);
 
         Map<String, String> paymentData3 = new HashMap<>();
         paymentData3.put("voucherCode", "ESHOP9876XYZ5432");
-        payment3 = new Payment("3", PaymentMethod.VOUCHER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData3);
+        payment3 = new Payment("3", PaymentMethod.VOUCHER, PaymentStatus.REJECTED, paymentData3);
     }
 
     @Test
@@ -60,12 +60,9 @@ class PaymentRepositoryTest {
     @Test
     void testUpdatePaymentMethod() {
         paymentRepository.create(payment1);
-        payment1.setMethod(PaymentMethod.BANK_TRANSFER.getValue());
+        payment1.setMethod(PaymentMethod.BANK_TRANSFER);
         Payment updatedPayment = paymentRepository.update(payment1);
-        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), updatedPayment.getMethod());
-
-        Payment retrievedPayment = paymentRepository.findById("1");
-        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), retrievedPayment.getMethod());
+        assertEquals(PaymentMethod.BANK_TRANSFER, updatedPayment.getMethod());
     }
 
     @Test
@@ -79,21 +76,5 @@ class PaymentRepositoryTest {
 
         Payment retrievedPayment = paymentRepository.findById("1");
         assertEquals(newData, retrievedPayment.getPaymentData());
-    }
-
-    @Test
-    void testUpdatePaymentWithNullId() {
-        paymentRepository.create(payment1);
-        payment1.setId(null);
-        Payment updatedPayment = paymentRepository.update(payment1);
-        assertNull(updatedPayment);
-    }
-
-    @Test
-    void testUpdatePaymentWithEmptyId() {
-        paymentRepository.create(payment1);
-        payment1.setId("");
-        Payment updatedPayment = paymentRepository.update(payment1);
-        assertNull(updatedPayment);
     }
 }

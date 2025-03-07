@@ -16,41 +16,30 @@ public class Payment {
     @Setter
     private Map<String, String> paymentData;
 
-    public Payment(String id, String method, String status, Map<String, String> paymentData) {
-        this.id = id;
+    public Payment(String id, PaymentMethod method, PaymentStatus status, Map<String, String> paymentData) {
+        this.setId(id); // Call setId() to validate the ID
         this.setMethod(method);
         this.paymentData = paymentData;
         this.setStatus(status);
     }
 
-    public void setStatus(String status) {
-        if (status == null || status.isEmpty()) {
-            this.status = null;
-            return;
+    public void setStatus(PaymentStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Payment status cannot be null.");
         }
-
-        if (!PaymentStatus.contains(status)) {
-            throw new IllegalArgumentException("Invalid payment status: " + status);
-        }
-        this.status = PaymentStatus.valueOf(status);
+        this.status = status;
     }
 
-    public void setMethod(String method) {
-        if (method == null || method.isEmpty()) {
-            this.method = null;
-            return;
+    public void setMethod(PaymentMethod method) {
+        if (method == null) {
+            throw new IllegalArgumentException("Payment method cannot be null.");
         }
-
-        if (!PaymentMethod.contains(method)) {
-            throw new IllegalArgumentException("Invalid payment method: " + method);
-        }
-        this.method = PaymentMethod.valueOf(method);
+        this.method = method;
     }
 
     public void setId(String id) {
         if (id == null || id.isEmpty()) {
-            this.id = id;
-            return;
+            throw new IllegalArgumentException("ID cannot be null or empty.");
         }
         this.id = id;
     }
