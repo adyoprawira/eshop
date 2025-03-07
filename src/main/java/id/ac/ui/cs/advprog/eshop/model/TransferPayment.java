@@ -5,6 +5,9 @@ import enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Setter
 @Getter
 public class TransferPayment extends Payment {
@@ -22,12 +25,18 @@ public class TransferPayment extends Payment {
     // Override methods from Payment as needed
     @Override
     public java.util.Map<String, String> getPaymentData() {
-        return null; // Placeholder
+        Map<String, String> data = new HashMap<>();
+        data.put("bankName", this.bankName);
+        data.put("accountNumber", this.accountNumber);
+        return data;
     }
 
     @Override
     public void setPaymentData(java.util.Map<String, String> paymentData) {
-        // Placeholder
+        if (paymentData != null) {
+            this.bankName = paymentData.get("bankName");
+            this.accountNumber = paymentData.get("accountNumber");
+        }
     }
 
     @Override
