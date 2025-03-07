@@ -26,7 +26,7 @@ class PaymentServiceImplTest {
     private PaymentRepository paymentRepository;
 
     @InjectMocks
-    private PaymentServiceImpl paymentService; // Corrected line
+    private PaymentServiceImpl paymentService;
 
     private Order order;
     private Payment payment;
@@ -42,63 +42,51 @@ class PaymentServiceImplTest {
     @Test
     void testAddPayment() {
         when(paymentRepository.create(any(Payment.class))).thenReturn(payment);
-
         Payment createdPayment = paymentService.addPayment(order, PaymentMethod.VOUCHER, paymentData);
-
         assertNotNull(createdPayment);
         assertEquals(payment, createdPayment);
-        verify(paymentRepository, times(1)).create(any(Payment.class));
+        verify(paymentRepository).create(any(Payment.class));
     }
 
     @Test
     void testSetStatusSuccess() {
         when(paymentRepository.update(any(Payment.class))).thenReturn(payment);
-
         Payment updatedPayment = paymentService.setStatus(payment, PaymentStatus.SUCCESS);
-
         assertEquals(PaymentStatus.SUCCESS, updatedPayment.getStatus());
-        verify(paymentRepository, times(1)).update(any(Payment.class));
+        verify(paymentRepository).update(any(Payment.class));
     }
 
     @Test
     void testSetStatusRejected() {
         when(paymentRepository.update(any(Payment.class))).thenReturn(payment);
-
         Payment updatedPayment = paymentService.setStatus(payment, PaymentStatus.REJECTED);
-
         assertEquals(PaymentStatus.REJECTED, updatedPayment.getStatus());
-        verify(paymentRepository, times(1)).update(any(Payment.class));
+        verify(paymentRepository).update(any(Payment.class));
     }
 
     @Test
     void testGetPayment() {
         when(paymentRepository.findById("1")).thenReturn(payment);
-
         Payment retrievedPayment = paymentService.getPayment("1");
-
         assertEquals(payment, retrievedPayment);
-        verify(paymentRepository, times(1)).findById("1");
+        verify(paymentRepository).findById("1");
     }
 
     @Test
     void testGetPaymentNotFound() {
         when(paymentRepository.findById("2")).thenReturn(null);
-
         Payment retrievedPayment = paymentService.getPayment("2");
-
         assertNull(retrievedPayment);
-        verify(paymentRepository, times(1)).findById("2");
+        verify(paymentRepository).findById("2");
     }
 
     @Test
     void testGetAllPayments() {
         Iterator<Payment> iterator = mock(Iterator.class);
         when(paymentRepository.findAll()).thenReturn(iterator);
-
         Iterator<Payment> retrievedIterator = paymentService.getAllPayments();
-
         assertEquals(iterator, retrievedIterator);
-        verify(paymentRepository, times(1)).findAll();
+        verify(paymentRepository).findAll();
     }
 
     @Test
@@ -109,7 +97,7 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void testAddPaymentNullOrder(){
+    void testAddPaymentNullOrder() {
         assertThrows(IllegalArgumentException.class, () -> paymentService.addPayment(null, PaymentMethod.VOUCHER, paymentData));
         verify(paymentRepository, never()).create(any(Payment.class));
     }
