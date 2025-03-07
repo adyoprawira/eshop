@@ -1,42 +1,29 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
+@Builder
+@Getter
 public class Payment {
-
     private String id;
     private String method;
     private String status;
+    @Setter
     private Map<String, String> paymentData;
 
     public Payment(String id, String method, String status, Map<String, String> paymentData) {
     }
 
-    public String getId() {
-        return null;
-    }
-
-    public void setId(String id) {
-    }
-
-    public String getMethod() {
-        return null;
+    public void setStatus(String status) {
     }
 
     public void setMethod(String method) {
     }
 
-    public String getStatus() {
-        return null;
-    }
-
-    public void setStatus(String status) {
-    }
-
-    public Map<String, String> getPaymentData() {
-        return null;
-    }
-
-    public void setPaymentData(Map<String, String> paymentData) {
+    public void setId(String id) {
     }
 }
