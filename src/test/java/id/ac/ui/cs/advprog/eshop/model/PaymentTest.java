@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import enums.PaymentMethod;
+import enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
@@ -18,78 +20,78 @@ class PaymentTest {
 
     @Test
     void testCreatePaymentValidStatus() {
-        payment = new Payment("1", "VOUCHER", "SUCCESS", paymentData);
-        assertEquals("SUCCESS", payment.getStatus());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.SUCCESS.getValue(), paymentData);
+        assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentDefaultStatus() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
-        assertEquals("PENDING", payment.getStatus());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        assertEquals(PaymentStatus.PENDING, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentRejectedStatus() {
-        payment = new Payment("1", "VOUCHER", "REJECTED", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.REJECTED.getValue(), paymentData);
+        assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentInvalidStatus() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("1", "VOUCHER", "INVALID_STATUS", paymentData);
+            new Payment("1", PaymentMethod.VOUCHER.getValue(), "INVALID_STATUS", paymentData);
         });
     }
 
     @Test
     void testSetStatusToSuccess() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
-        payment.setStatus("SUCCESS");
-        assertEquals("SUCCESS", payment.getStatus());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        payment.setStatus(PaymentStatus.SUCCESS.getValue());
+        assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
     }
 
     @Test
     void testSetStatusToRejected() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
-        payment.setStatus("REJECTED");
-        assertEquals("REJECTED", payment.getStatus());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        payment.setStatus(PaymentStatus.REJECTED.getValue());
+        assertEquals(PaymentStatus.REJECTED, payment.getStatus());
     }
 
     @Test
     void testSetStatusToInvalidStatus() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         assertThrows(IllegalArgumentException.class, () -> payment.setStatus("MEOW"));
     }
 
     @Test
     void testCreatePaymentValidMethodVoucher() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
-        assertEquals("VOUCHER", payment.getMethod());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        assertEquals(PaymentMethod.VOUCHER, payment.getMethod());
     }
 
     @Test
     void testCreatePaymentValidMethodBankTransfer() {
-        payment = new Payment("1", "BANK_TRANSFER", "PENDING", paymentData);
-        assertEquals("BANK_TRANSFER", payment.getMethod());
+        payment = new Payment("1", PaymentMethod.BANK_TRANSFER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        assertEquals(PaymentMethod.BANK_TRANSFER, payment.getMethod());
     }
 
     @Test
     void testCreatePaymentInvalidMethod() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("1", "INVALID_METHOD", "PENDING", paymentData);
+            new Payment("1", "INVALID_METHOD", PaymentStatus.PENDING.getValue(), paymentData);
         });
     }
 
     @Test
     void testSetMethodToValidMethod() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
-        payment.setMethod("BANK_TRANSFER");
-        assertEquals("BANK_TRANSFER", payment.getMethod());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
+        payment.setMethod(PaymentMethod.BANK_TRANSFER.getValue());
+        assertEquals(PaymentMethod.BANK_TRANSFER, payment.getMethod());
     }
 
     @Test
     void testSetMethodToInvalidMethod() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         assertThrows(IllegalArgumentException.class, () -> payment.setMethod("MEOW"));
     }
 
@@ -97,19 +99,19 @@ class PaymentTest {
     void testCreatePaymentValidPaymentData() {
         Map<String, String> data = new HashMap<>();
         data.put("voucherCode", "ESHOP1234ABC5678");
-        payment = new Payment("1", "VOUCHER", "PENDING", data);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), data);
         assertEquals(data, payment.getPaymentData());
     }
 
     @Test
     void testCreatePaymentNullPaymentData() {
-        payment = new Payment("1", "VOUCHER", "PENDING", null);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), null);
         assertNull(payment.getPaymentData());
     }
 
     @Test
     void testSetPaymentDataValid() {
-        payment = new Payment("1", "VOUCHER", "PENDING", new HashMap<>());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), new HashMap<>());
         Map<String, String> newData = new HashMap<>();
         newData.put("bankName", "Example Bank");
         payment.setPaymentData(newData);
@@ -118,46 +120,46 @@ class PaymentTest {
 
     @Test
     void testSetPaymentDataNull() {
-        payment = new Payment("1", "VOUCHER", "PENDING", new HashMap<>());
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), new HashMap<>());
         payment.setPaymentData(null);
         assertNull(payment.getPaymentData());
     }
 
     @Test
     void testCreatePaymentValidId() {
-        payment = new Payment("validId", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("validId", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         assertEquals("validId", payment.getId());
     }
 
     @Test
     void testSetIdValid() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         payment.setId("newId");
         assertEquals("newId", payment.getId());
     }
 
     @Test
     void testCreatePaymentNullId() {
-        payment = new Payment(null, "VOUCHER", "PENDING", paymentData);
+        payment = new Payment(null, PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         assertNull(payment.getId());
     }
 
     @Test
     void testCreatePaymentEmptyId() {
-        payment = new Payment("", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         assertEquals("", payment.getId());
     }
 
     @Test
     void testSetIdNull() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         payment.setId(null);
         assertNull(payment.getId());
     }
 
     @Test
     void testSetIdEmpty() {
-        payment = new Payment("1", "VOUCHER", "PENDING", paymentData);
+        payment = new Payment("1", PaymentMethod.VOUCHER.getValue(), PaymentStatus.PENDING.getValue(), paymentData);
         payment.setId("");
         assertEquals("", payment.getId());
     }

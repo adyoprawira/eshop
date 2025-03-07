@@ -1,49 +1,50 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import lombok.Builder;
+import enums.PaymentMethod;
+import enums.PaymentStatus;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
 
-@Builder
 @Getter
 public class Payment {
     private String id;
-    private String method;
-    private String status;
+    private PaymentMethod method;
+    private PaymentStatus status;
     @Setter
     private Map<String, String> paymentData;
 
     public Payment(String id, String method, String status, Map<String, String> paymentData) {
         this.id = id;
-        this.setMethod(method); // Use setter for validation
+        this.setMethod(method);
         this.paymentData = paymentData;
-        this.setStatus(status); // Use setter for validation
+        this.setStatus(status);
     }
 
     public void setStatus(String status) {
         if (status == null || status.isEmpty()) {
-            this.status = status;
+            this.status = null;
             return;
         }
 
-        if (!status.equals("SUCCESS") && !status.equals("PENDING") && !status.equals("REJECTED")) {
+        if (!PaymentStatus.contains(status)) {
             throw new IllegalArgumentException("Invalid payment status: " + status);
         }
-        this.status = status;
+        this.status = PaymentStatus.valueOf(status);
     }
 
     public void setMethod(String method) {
         if (method == null || method.isEmpty()) {
-            this.method = method;
+            this.method = null;
             return;
         }
 
-        if (!method.equals("VOUCHER") && !method.equals("BANK_TRANSFER")) {
+        if (!PaymentMethod.contains(method)) {
             throw new IllegalArgumentException("Invalid payment method: " + method);
         }
-        this.method = method;
+        this.method = PaymentMethod.valueOf(method);
     }
 
     public void setId(String id) {
