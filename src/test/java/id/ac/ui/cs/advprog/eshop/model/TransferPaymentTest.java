@@ -2,26 +2,14 @@ package id.ac.ui.cs.advprog.eshop.model;
 
 import enums.PaymentMethod;
 import enums.PaymentStatus;
-import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
-import id.ac.ui.cs.advprog.eshop.service.PaymentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
+import java.util.HashMap;
+import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 class TransferPaymentTest {
-
-    @Mock
-    private PaymentRepository paymentRepository;
-
-    @InjectMocks
-    private PaymentServiceImpl paymentService;
 
     private Order order;
     private TransferPayment transferPayment;
@@ -33,75 +21,71 @@ class TransferPaymentTest {
     }
 
     @Test
-    void testAddTransferPayment() {
-        when(paymentRepository.create(any(Payment.class))).thenReturn(transferPayment);
-        Payment createdPayment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData());
-        assertNotNull(createdPayment);
-        assertInstanceOf(TransferPayment.class, createdPayment);
-        TransferPayment createdTransferPayment = (TransferPayment) createdPayment;
-        assertEquals("Example Bank", createdTransferPayment.getBankName());
-        assertEquals("1234567890", createdTransferPayment.getAccountNumber());
-        verify(paymentRepository).create(any(Payment.class));
+    void testTransferPaymentConstructor() {
+        assertEquals("1", transferPayment.getId());
+        assertEquals(PaymentStatus.PENDING, transferPayment.getStatus());
+        assertEquals("Example Bank", transferPayment.getBankName());
+        assertEquals("1234567890", transferPayment.getAccountNumber());
+        assertEquals(PaymentMethod.BANK_TRANSFER, transferPayment.getMethod());
     }
 
     @Test
-    void testSetTransferPaymentStatusSuccess() {
-        when(paymentRepository.update(any(Payment.class))).thenReturn(transferPayment);
-        Payment updatedPayment = paymentService.setStatus(transferPayment, PaymentStatus.SUCCESS);
-        assertEquals(PaymentStatus.SUCCESS, updatedPayment.getStatus());
-        verify(paymentRepository).update(any(Payment.class));
+    void testGetPaymentData() {
+        Map<String, String> data = transferPayment.getPaymentData();
+        assertEquals("Example Bank", data.get("bankName"));
+        assertEquals("1234567890", data.get("accountNumber"));
     }
 
     @Test
-    void testSetTransferPaymentStatusRejected() {
-        when(paymentRepository.update(any(Payment.class))).thenReturn(transferPayment);
-        Payment updatedPayment = paymentService.setStatus(transferPayment, PaymentStatus.REJECTED);
-        assertEquals(PaymentStatus.REJECTED, updatedPayment.getStatus());
-        verify(paymentRepository).update(any(Payment.class));
+    void testSetPaymentDataValid() {
+        Map<String, String> newData = new HashMap<>();
+        newData.put("bankName", "New Bank");
+        newData.put("accountNumber", "9876543210");
+        transferPayment.setPaymentData(newData);
+        assertEquals("New Bank", transferPayment.getBankName());
+        assertEquals("9876543210", transferPayment.getAccountNumber());
     }
 
     @Test
-    void testTransferPaymentInvalidStatus() {
-        assertThrows(IllegalArgumentException.class, () -> paymentService.setStatus(transferPayment, PaymentStatus.valueOf("INVALID_STATUS")));
-        verify(paymentRepository, never()).update(any(Payment.class));
-        verify(order, never()).setStatus(anyString());
+    void testSetPaymentDataNull() {
+        transferPayment.setPaymentData(null);
+        assertEquals("Example Bank", transferPayment.getBankName()); // Should keep original values
+        assertEquals("1234567890", transferPayment.getAccountNumber());
     }
 
     @Test
-    void testAddTransferPaymentNullOrder() {
-        assertThrows(IllegalArgumentException.class, () -> paymentService.addPayment(null, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData()));
-        verify(paymentRepository, never()).create(any(Payment.class));
+    void testSetStatus() {
+        transferPayment.setStatus(PaymentStatus.SUCCESS);
+        assertEquals(PaymentStatus.SUCCESS, transferPayment.getStatus());
     }
 
     @Test
-    void testTransferPaymentMethod() {
-        when(paymentRepository.create(any(Payment.class))).thenReturn(transferPayment);
-        Payment createdPayment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData());
-        assertEquals(PaymentMethod.BANK_TRANSFER, createdPayment.getMethod());
+    void testSetMethod() {
+        transferPayment.setMethod(PaymentMethod.VOUCHER);
+        assertEquals(PaymentMethod.VOUCHER, transferPayment.getMethod());
     }
 
     @Test
-    void testTransferPaymentData() {
-        when(paymentRepository.create(any(Payment.class))).thenReturn(transferPayment);
-        Payment createdPayment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData());
-        assertEquals(transferPayment.getPaymentData(), createdPayment.getPaymentData());
+    void testSetId() {
+        transferPayment.setId("2");
+        assertEquals("2", transferPayment.getId());
     }
 
     @Test
-    void testTransferPaymentBankName(){
-        when(paymentRepository.create(any(Payment.class))).thenReturn(transferPayment);
-        Payment createdPayment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData());
-        assertInstanceOf(TransferPayment.class, createdPayment);
-        TransferPayment createdTransferPayment = (TransferPayment) createdPayment;
-        assertEquals("Example Bank", createdTransferPayment.getBankName());
+    void testSetOrder() {
+        transferPayment.setOrder(order);
+        assertEquals(order, transferPayment.getOrder());
     }
 
     @Test
-    void testTransferPaymentAccountNumber(){
-        when(paymentRepository.create(any(Payment.class))).thenReturn(transferPayment);
-        Payment createdPayment = paymentService.addPayment(order, PaymentMethod.BANK_TRANSFER, transferPayment.getPaymentData());
-        assertInstanceOf(TransferPayment.class, createdPayment);
-        TransferPayment createdTransferPayment = (TransferPayment) createdPayment;
-        assertEquals("1234567890", createdTransferPayment.getAccountNumber());
+    void testSetBankName() {
+        transferPayment.setBankName("New Bank Name");
+        assertEquals("New Bank Name", transferPayment.getBankName());
+    }
+
+    @Test
+    void testSetAccountNumber() {
+        transferPayment.setAccountNumber("0987654321");
+        assertEquals("0987654321", transferPayment.getAccountNumber());
     }
 }

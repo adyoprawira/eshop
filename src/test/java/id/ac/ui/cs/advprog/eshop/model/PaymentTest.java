@@ -7,15 +7,18 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class PaymentTest {
 
     private Payment payment;
     private Map<String, String> paymentData;
+    private Order order;
 
     @BeforeEach
     void setUp() {
         paymentData = new HashMap<>();
+        order = mock(Order.class);
     }
 
     @Test
@@ -155,4 +158,62 @@ class PaymentTest {
             payment.setId("");
         });
     }
+
+    @Test
+    void testSetStatusNull() {
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        assertThrows(IllegalArgumentException.class, () -> {
+            payment.setStatus(null);
+        });
+    }
+
+    @Test
+    void testSetMethodNull() {
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        assertThrows(IllegalArgumentException.class, () -> {
+            payment.setMethod(null);
+        });
+    }
+
+    @Test
+    void testSetOrderValid() {
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        payment.setOrder(order);
+        assertEquals(order, payment.getOrder());
+    }
+
+    @Test
+    void testSetOrderNull() {
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        assertThrows(IllegalArgumentException.class, () -> {
+            payment.setOrder(null);
+        });
+    }
+
+    //Added tests for branching.
+    @Test
+    void testSetIdValidId(){
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        payment.setId("validID");
+        assertEquals("validID", payment.getId());
+    }
+    @Test
+    void testSetStatusValidStatus(){
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        payment.setStatus(PaymentStatus.SUCCESS);
+        assertEquals(PaymentStatus.SUCCESS, payment.getStatus());
+    }
+    @Test
+    void testSetMethodValidMethod(){
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        payment.setMethod(PaymentMethod.BANK_TRANSFER);
+        assertEquals(PaymentMethod.BANK_TRANSFER, payment.getMethod());
+    }
+    @Test
+    void testSetOrderValidOrder(){
+        payment = new Payment("1", PaymentMethod.VOUCHER, PaymentStatus.PENDING, paymentData);
+        payment.setOrder(order);
+        assertEquals(order, payment.getOrder());
+    }
+
 }
