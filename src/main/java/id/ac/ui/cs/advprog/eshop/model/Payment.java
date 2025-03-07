@@ -15,6 +15,7 @@ public class Payment {
     private PaymentStatus status;
     @Setter
     private Map<String, String> paymentData;
+    private Order order;
 
     public Payment(String id, PaymentMethod method, PaymentStatus status, Map<String, String> paymentData) {
         this.setId(id); // Call setId() to validate the ID
@@ -42,5 +43,12 @@ public class Payment {
             throw new IllegalArgumentException("ID cannot be null or empty.");
         }
         this.id = id;
+    }
+
+    public void setOrder(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException("Order cannot be null.");
+        }
+        this.order = order;
     }
 }
